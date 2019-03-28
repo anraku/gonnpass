@@ -1,11 +1,11 @@
 package main
 
 import (
-	"encoding/json"
+	"flag"
 	"fmt"
 
-	domain "github.com/anraku/gonnpass/domain/services"
-	"github.com/anraku/gonnpass/interfaces"
+	"github.com/anraku/gonnpass/domain/services"
+	"github.com/anraku/gonnpass/usecases"
 )
 
 const (
@@ -13,18 +13,18 @@ const (
 )
 
 func main() {
-	//c := domain.NewClient(nil)
-	c := domain.NewMockClient()
-	body, err := c.Get("?keyword=python", nil)
-	if err != nil {
-		panic(err)
-	}
+	var (
+		i = flag.Int("int", 0, "int flag")
+		s = flag.String("str", "default", "string flag")
+		b = flag.Bool("bool", false, "bool flag")
+	)
+	flag.Parse()
 
-	cr := new(interfaces.ConnpassResponse)
-	err = json.Unmarshal(body, cr)
-	if err != nil {
-		panic(err)
-	}
+	//c := services.NewClient(nil)
+	c := services.NewMockClient()
+	ur := usecases.NewRequestIterator(c)
+	events := ur.FetchEvents()
 
-	fmt.Printf("%+v", cr)
+	fmt.Println(events)
+	fmt.Println(*i, *s, *b)
 }
