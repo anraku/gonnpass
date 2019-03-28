@@ -13,7 +13,8 @@ const (
 )
 
 func main() {
-	c := domain.NewClient(nil)
+	//c := domain.NewClient(nil)
+	c := domain.NewMockClient()
 	body, err := c.Get("?keyword=python", nil)
 	if err != nil {
 		panic(err)

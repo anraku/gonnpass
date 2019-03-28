@@ -21,7 +21,7 @@ type HTTPClient struct {
 	UserAgent string
 }
 
-func NewClient(httpClient *http.Client) Client {
+func NewClient(httpClient *http.Client) *HTTPClient {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
