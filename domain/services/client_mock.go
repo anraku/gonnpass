@@ -22,9 +22,5 @@ func (c *MockClient) Get(query string, param map[string]string) ([]byte, error) 
 	}
 	defer f.Close()
 
-	b, err := ioutil.ReadAll(f)
-	if err != nil {
-		return nil, err
-	}
-	return b, nil
+	return ioutil.ReadAll(f)
 }

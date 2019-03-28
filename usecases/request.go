@@ -8,7 +8,7 @@ import (
 )
 
 type RequestUsecase interface {
-	FetchEvents()
+	FetchEvents() (*models.ConnpassResponse, error)
 }
 
 type RequestIterator struct {
@@ -21,7 +21,7 @@ func NewRequestIterator(sc services.Client) *RequestIterator {
 	}
 }
 
-func (i *RequestIterator) FetchEvents() *models.ConnpassResponse {
+func (i *RequestIterator) FetchEvents() (*models.ConnpassResponse, error) {
 	body, err := i.sc.Get("?keyword=python", nil)
 	if err != nil {
 		panic(err)
@@ -29,9 +29,5 @@ func (i *RequestIterator) FetchEvents() *models.ConnpassResponse {
 
 	cr := new(models.ConnpassResponse)
 	err = json.Unmarshal(body, cr)
-	if err != nil {
-		panic(err)
-	}
-
-	return cr
+	return cr, err
 }
