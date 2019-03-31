@@ -1,11 +1,12 @@
 package cli
 
 import (
-	"flag"
 	"fmt"
+	"os"
 
 	"github.com/anraku/gonnpass/domain/data"
 	"github.com/anraku/gonnpass/usecase"
+	"github.com/urfave/cli"
 )
 
 type Command struct {
@@ -18,44 +19,66 @@ func NewCommand(ru usecase.EventUsecase) *Command {
 	}
 }
 
-func (c *Command) Run() error {
-	var (
-		and Keyword
-		or  Keyword
-	)
+const EVENTS_COUNT = 10
 
-	flag.Var(&and, "and", "and search keyword")
-	flag.Var(&or, "or", "or search keyword")
-	updateOrder := flag.Bool("update-order", false, "update order")
-	startOrder := flag.Bool("start-order", true, "update order")
-	newOrder := flag.Bool("new-order", false, "update order")
-	count := flag.Int("n", 10, "number of events to print")
-	flag.Parse()
+func (cmd *Command) Run() error {
+	app := cli.NewApp()
+	app.Name = "gonnpass"
+	app.Flags = []cli.Flag{
+		cli.StringSliceFlag{
+			Name:  "and",
+			Usage: "AND is search keyword",
+		},
+		cli.StringSliceFlag{
+			Name:  "or",
+			Usage: "OR for search keyword",
+		},
+		cli.BoolFlag{
+			Name:  "update-order",
+			Usage: "Sort events order by update_at",
+		},
+		cli.BoolFlag{
+			Name:  "start-order",
+			Usage: "Sort events order by start_at",
+		},
+		cli.BoolFlag{
+			Name:  "new-order",
+			Usage: "Sort events order by new_at",
+		},
+		cli.IntFlag{
+			Name:  "n",
+			Value: EVENTS_COUNT,
+			Usage: "number of events to print",
+		},
+	}
+	app.Action = func(c *cli.Context) error {
+		order := evalOrder(c.Bool("update-order"), c.Bool("start-order"), c.Bool("new-order"))
 
-	order := evalOrder(*updateOrder, *startOrder, *newOrder)
+		// create input data fro usecase
+		input := data.InputData{
+			KeywordAND: c.StringSlice("and"),
+			KeywordOR:  c.StringSlice("or"),
+			Order:      order,
+			Count:      c.Int("n"),
+		}
 
-	// create input data fro usecase
-	input := data.InputData{
-		KeywordAND: and.Values,
-		KeywordOR:  or.Values,
-		Order:      order,
-		Count:      *count,
+		events, err := cmd.ru.SearchEvents(input)
+		if err != nil {
+			return err
+		}
+
+		layout := "2006/01/02 15:04:05"
+		for _, v := range events.Events {
+			start := v.StartedAt.Format(layout)
+			end := v.EndedAt.Format(layout)
+			fmt.Println(v.Title)
+			fmt.Printf("    %s - %s\n", start, end)
+			fmt.Printf("    %s\n", v.EventURL)
+		}
+		return nil
 	}
 
-	events, err := c.ru.SearchEvents(input)
-	if err != nil {
-		return err
-	}
-
-	layout := "2006/01/02 15:04:05"
-	for _, v := range events.Events {
-		start := v.StartedAt.Format(layout)
-		end := v.EndedAt.Format(layout)
-		fmt.Println(v.Title)
-		fmt.Printf("    %s - %s\n", start, end)
-		fmt.Printf("    %s\n", v.EventURL)
-	}
-	return nil
+	return app.Run(os.Args)
 }
 
 type Keyword struct {
