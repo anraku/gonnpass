@@ -8,21 +8,21 @@ import (
 	"github.com/anraku/gonnpass/domain/repository"
 )
 
-type RequestUsecase interface {
+type EventUsecase interface {
 	SearchEvents(input data.InputData) (*model.Events, error)
 }
 
-type RequestIterator struct {
+type EventIterator struct {
 	sc repository.Events
 }
 
-func NewRequestIterator(sc repository.Events) *RequestIterator {
-	return &RequestIterator{
+func NewEventIterator(sc repository.Events) *EventIterator {
+	return &EventIterator{
 		sc: sc,
 	}
 }
 
-func (i *RequestIterator) SearchEvents(input data.InputData) (*model.Events, error) {
+func (i *EventIterator) SearchEvents(input data.InputData) (*model.Events, error) {
 	body, err := i.sc.SearchEvents(input)
 	if err != nil {
 		return nil, err

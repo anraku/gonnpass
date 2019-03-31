@@ -9,10 +9,10 @@ import (
 )
 
 type Command struct {
-	ru usecase.RequestUsecase
+	ru usecase.EventUsecase
 }
 
-func NewCommand(ru usecase.RequestUsecase) *Command {
+func NewCommand(ru usecase.EventUsecase) *Command {
 	return &Command{
 		ru: ru,
 	}
@@ -26,14 +26,20 @@ func (c *Command) Run() error {
 
 	flag.Var(&and, "and", "and search keyword")
 	flag.Var(&or, "or", "or search keyword")
+	updateOrder := flag.Bool("update-order", false, "update order")
+	startOrder := flag.Bool("start-order", true, "update order")
+	newOrder := flag.Bool("new-order", false, "update order")
+	count := flag.Int("n", 10, "number of events to print")
 	flag.Parse()
 
-	fmt.Printf("daimori: and: %+v\n", and)
-	fmt.Printf("daimori: or: %+v\n", or)
+	order := evalOrder(*updateOrder, *startOrder, *newOrder)
+
 	// create input data fro usecase
 	input := data.InputData{
 		KeywordAND: and.Values,
 		KeywordOR:  or.Values,
+		Order:      order,
+		Count:      *count,
 	}
 
 	events, err := c.ru.SearchEvents(input)
@@ -41,7 +47,14 @@ func (c *Command) Run() error {
 		return err
 	}
 
-	fmt.Println(events)
+	layout := "2006/01/02 15:04:05"
+	for _, v := range events.Events {
+		start := v.StartedAt.Format(layout)
+		end := v.EndedAt.Format(layout)
+		fmt.Println(v.Title)
+		fmt.Printf("    %s - %s\n", start, end)
+		fmt.Printf("    %s\n", v.EventURL)
+	}
 	return nil
 }
 
@@ -56,4 +69,14 @@ func (k *Keyword) String() string {
 func (k *Keyword) Set(v string) error {
 	k.Values = append(k.Values, v)
 	return nil
+}
+
+func evalOrder(update, start, newOrder bool) data.Order {
+	if update {
+		return data.UpdateOrder
+	} else if newOrder {
+		return data.NewOrder
+	} else {
+		return data.StartOrder
+	}
 }

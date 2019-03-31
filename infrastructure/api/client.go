@@ -42,13 +42,11 @@ func (c *HTTPClient) SearchEvents(input data.InputData) ([]byte, error) {
 }
 
 func generateURL(base *url.URL, input data.InputData) string {
-	fmt.Printf("input: %+v", input)
 	s := base.String() + "?keyword="
 	for _, v := range input.KeywordAND {
 		s += v
 		s += "&keyword="
 	}
-	fmt.Println("daimori and: ", strings.LastIndex(s, "&keyword="))
 	s = s[:strings.LastIndex(s, "&keyword=")]
 
 	s += "&keyword_or="
@@ -56,9 +54,10 @@ func generateURL(base *url.URL, input data.InputData) string {
 		s += v
 		s += "&keyword_or="
 	}
-	fmt.Println("daimori or: ", strings.LastIndex(s, "&keyword_or="))
 	s = s[:strings.LastIndex(s, "&keyword_or=")]
 
-	fmt.Println("daimori: URL: ", s)
+	s += "&order=" + fmt.Sprintf("%d", input.Order)
+	s += "&count=" + fmt.Sprintf("%d", input.Count)
+
 	return s
 }
