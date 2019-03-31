@@ -4,14 +4,15 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/anraku/gonnpass/usecases"
+	"github.com/anraku/gonnpass/domain/data"
+	"github.com/anraku/gonnpass/usecase"
 )
 
 type Command struct {
-	ru usecases.RequestUsecase
+	ru usecase.RequestUsecase
 }
 
-func NewCommand(ru usecases.RequestUsecase) *Command {
+func NewCommand(ru usecase.RequestUsecase) *Command {
 	return &Command{
 		ru: ru,
 	}
@@ -26,7 +27,16 @@ func (c *Command) Run() error {
 	flag.Var(&and, "and", "and search keyword")
 	flag.Var(&or, "or", "or search keyword")
 	flag.Parse()
-	events, err := c.ru.FetchEvents()
+
+	fmt.Printf("daimori: and: %+v\n", and)
+	fmt.Printf("daimori: or: %+v\n", or)
+	// create input data fro usecase
+	input := data.InputData{
+		KeywordAND: and.Values,
+		KeywordOR:  or.Values,
+	}
+
+	events, err := c.ru.SearchEvents(input)
 	if err != nil {
 		return err
 	}

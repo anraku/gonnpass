@@ -1,15 +1,21 @@
 package main
 
 import (
-	"github.com/anraku/gonnpass/domain/services"
+	"fmt"
+	"os"
+
+	"github.com/anraku/gonnpass/infrastructures/api"
 	"github.com/anraku/gonnpass/interfaces/cli"
-	"github.com/anraku/gonnpass/usecases"
+	"github.com/anraku/gonnpass/usecase"
 )
 
 func main() {
-	// c := services.NewClient(nil)
-	c := services.NewMockClient()
-	requestUsecase := usecases.NewRequestIterator(c)
+	c := api.NewClient(nil)
+	//c := api.NewMockClient()
+	requestUsecase := usecase.NewRequestIterator(c)
 	app := cli.NewCommand(requestUsecase)
-	app.Run()
+	if err := app.Run(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }

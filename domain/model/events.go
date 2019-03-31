@@ -1,9 +1,9 @@
-package models
+package model
 
 import "time"
 
 // generate by https://mholt.github.io/json-to-go/
-type ConnpassResponse struct {
+type Events struct {
 	ResultsReturned int `json:"results_returned"`
 	Events          []struct {
 		EventURL      string `json:"event_url"`

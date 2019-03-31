@@ -1,6 +1,6 @@
-package datas
+package data
 
-type RequestData struct {
+type InputData struct {
 	KeywordAND []string
 	KeywordOR  []string
 }
