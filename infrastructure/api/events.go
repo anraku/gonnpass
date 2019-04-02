@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/anraku/gonnpass/domain/data"
+	"github.com/anraku/gonnpass/domain/repository"
 )
 
 const (
@@ -21,7 +22,7 @@ type HTTPClient struct {
 	UserAgent string
 }
 
-func NewClient(httpClient *http.Client) *HTTPClient {
+func NewClient(httpClient *http.Client) repository.Events {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}

@@ -11,7 +11,7 @@ import (
 
 func main() {
 	c := api.NewClient(nil)
-	//c := api.NewMockClient()
+	// c := api.NewMockClient()
 	requestUsecase := usecase.NewEventIterator(c)
 	app := cli.NewCommand(requestUsecase)
 	if err := app.Run(); err != nil {

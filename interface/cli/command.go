@@ -27,11 +27,11 @@ func (cmd *Command) Run() error {
 	app.Flags = []cli.Flag{
 		cli.StringSliceFlag{
 			Name:  "and, a",
-			Usage: "AND is search keyword",
+			Usage: "use as and condition",
 		},
 		cli.StringSliceFlag{
 			Name:  "or, o",
-			Usage: "OR for search keyword",
+			Usage: "use as or condition",
 		},
 		cli.BoolFlag{
 			Name:  "update-order, uo",
@@ -39,7 +39,7 @@ func (cmd *Command) Run() error {
 		},
 		cli.BoolFlag{
 			Name:  "start-order, so",
-			Usage: "Sort events order by start_at",
+			Usage: "Sort events order by start_at (default order)",
 		},
 		cli.BoolFlag{
 			Name:  "new-order, no",
