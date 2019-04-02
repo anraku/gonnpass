@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/anraku/gonnpass/domain/data"
 )
@@ -46,7 +47,9 @@ func generateURL(base *url.URL, input data.InputData) string {
 		or    = "keyword_or="
 		order = "order="
 		count = "count="
+		start = "ymd="
 	)
+
 	s := base.String() + "?"
 
 	for _, v := range input.KeywordAND {
@@ -58,6 +61,8 @@ func generateURL(base *url.URL, input data.InputData) string {
 	}
 
 	s += order + fmt.Sprintf("%d", input.Order) + "&"
-	s += count + fmt.Sprintf("%d", input.Count)
+	s += count + fmt.Sprintf("%d", input.Count) + "&"
+	s += start + time.Now().Format("20060102")
+
 	return s
 }
