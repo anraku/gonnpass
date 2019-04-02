@@ -26,23 +26,23 @@ func (cmd *Command) Run() error {
 	app.Name = "gonnpass"
 	app.Flags = []cli.Flag{
 		cli.StringSliceFlag{
-			Name:  "and",
+			Name:  "and, a",
 			Usage: "AND is search keyword",
 		},
 		cli.StringSliceFlag{
-			Name:  "or",
+			Name:  "or, o",
 			Usage: "OR for search keyword",
 		},
 		cli.BoolFlag{
-			Name:  "update-order",
+			Name:  "update-order, uo",
 			Usage: "Sort events order by update_at",
 		},
 		cli.BoolFlag{
-			Name:  "start-order",
+			Name:  "start-order, so",
 			Usage: "Sort events order by start_at",
 		},
 		cli.BoolFlag{
-			Name:  "new-order",
+			Name:  "new-order, no",
 			Usage: "Sort events order by new_at",
 		},
 		cli.IntFlag{

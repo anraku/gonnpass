@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"strings"
 
 	"github.com/anraku/gonnpass/domain/data"
 )
@@ -42,22 +41,23 @@ func (c *HTTPClient) SearchEvents(input data.InputData) ([]byte, error) {
 }
 
 func generateURL(base *url.URL, input data.InputData) string {
-	s := base.String() + "?keyword="
+	const (
+		and   = "keyword="
+		or    = "keyword_or="
+		order = "order="
+		count = "count="
+	)
+	s := base.String() + "?"
+
 	for _, v := range input.KeywordAND {
-		s += v
-		s += "&keyword="
+		s += and + v + "&"
 	}
-	s = s[:strings.LastIndex(s, "&keyword=")]
 
-	s += "&keyword_or="
 	for _, v := range input.KeywordOR {
-		s += v
-		s += "&keyword_or="
+		s += or + v + "&"
 	}
-	s = s[:strings.LastIndex(s, "&keyword_or=")]
 
-	s += "&order=" + fmt.Sprintf("%d", input.Order)
-	s += "&count=" + fmt.Sprintf("%d", input.Count)
-
+	s += order + fmt.Sprintf("%d", input.Order) + "&"
+	s += count + fmt.Sprintf("%d", input.Count)
 	return s
 }
