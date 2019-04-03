@@ -3,8 +3,8 @@ package usecase
 import (
 	"encoding/json"
 
+	"github.com/anraku/gonnpass/domain/model"
 	"github.com/anraku/gonnpass/usecase/data"
-	"github.com/anraku/gonnpass/usecase/model"
 	"github.com/anraku/gonnpass/usecase/repository"
 )
 
