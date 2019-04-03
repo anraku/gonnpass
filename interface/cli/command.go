@@ -24,6 +24,7 @@ const EVENTS_COUNT = 10
 func (cmd *Command) Run() error {
 	app := cli.NewApp()
 	app.Name = "gonnpass"
+	app.Version = "1.0.0"
 	app.Flags = []cli.Flag{
 		cli.StringSliceFlag{
 			Name:  "and, a",
