@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/anraku/gonnpass/domain/data"
 	"github.com/anraku/gonnpass/usecase"
+	"github.com/anraku/gonnpass/usecase/data"
 	"github.com/urfave/cli"
 )
 

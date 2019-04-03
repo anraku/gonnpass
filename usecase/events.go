@@ -3,9 +3,9 @@ package usecase
 import (
 	"encoding/json"
 
-	"github.com/anraku/gonnpass/domain/data"
-	"github.com/anraku/gonnpass/domain/model"
-	"github.com/anraku/gonnpass/domain/repository"
+	"github.com/anraku/gonnpass/usecase/data"
+	"github.com/anraku/gonnpass/usecase/model"
+	"github.com/anraku/gonnpass/usecase/repository"
 )
 
 type EventUsecase interface {

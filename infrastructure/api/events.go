@@ -7,8 +7,8 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/anraku/gonnpass/domain/data"
-	"github.com/anraku/gonnpass/domain/repository"
+	"github.com/anraku/gonnpass/usecase/data"
+	"github.com/anraku/gonnpass/usecase/repository"
 )
 
 const (
