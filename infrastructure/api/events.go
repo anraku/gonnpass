@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/anraku/gonnpass/usecase/data"
 	"github.com/anraku/gonnpass/usecase/repository"
@@ -63,7 +62,6 @@ func generateURL(base *url.URL, input data.InputData) string {
 
 	s += order + fmt.Sprintf("%d", input.Order) + "&"
 	s += count + fmt.Sprintf("%d", input.Count) + "&"
-	s += start + time.Now().Format("20060102")
 
 	return s
 }
